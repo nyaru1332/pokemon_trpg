@@ -19,46 +19,46 @@ conn = sqlite3.connect('pokemon_id_data.db')
 def damage_check_attack():
     one_tenth_attack = total_attack/10
     one_tenth_enemy_defense = total_defense/10
-    skill_power = skill_power/10
-    skill_power = int(Decimal(str(skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+    one_tenth_skill_power = skill_power/10
+    one_tenth_skill_power_after = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_attack = int(Decimal(str(one_tenth_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_enemy_defense = int(Decimal(str(one_tenth_enemy_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
-    skill_total = skill_power * types_boost * item_boost
+    skill_total = one_tenth_skill_power_after * types_boost * item_boost
     offensive_power = one_tenth_attack - one_tenth_enemy_defense
     attack_answer = (grade_number - enemy_grade_number + offensive_power + skill_total + ability_rank_boost)*types_boost
     return attack_answer
 #ダメージ計算関数急所用
 def damage_check_attack_critical():
-    skill_power = skill_power/10
-    skill_power = int(Decimal(str(skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+    one_tenth_skill_power = skill_power/10
+    one_tenth_skill_power_after = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_attack = total_attack/10
     one_tenth_enemy_defense = enemy_total_defense/10
     one_tenth_attack = int(Decimal(str(one_tenth_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_enemy_defense = int(Decimal(str(one_tenth_enemy_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
-    skill_total = skill_power * types_boost * item_boost
+    skill_total = one_tenth_skill_power_after * types_boost * item_boost
     offensive_power = one_tenth_attack - one_tenth_enemy_defense
     attack_answer = (grade_number - enemy_grade_number + offensive_power + skill_total + ability_rank)*types_boost
     return attack_answer
 
 #ダメージ計算関数特攻用
 def damaage_check__special_attack():
-    skill_power = skill_power/10
-    skill_power = int(Decimal(str(skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+    one_tenth_skill_power = skill_power/10
+    one_tenth_skill_power_after = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_special_attack = total_special_attack/10
     one_tenth_enemy_special_defense = enemy_total_defense/10
     one_tenth_special_attack = int(Decimal(str(one_tenth_special_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_special_enemy_defense = int(Decimal(str(one_tenth_enemy_special_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
-    skill_total = skill_power * types_boost * item_boost
+    skill_total = one_tenth_skill_power_after * types_boost * item_boost
     special_offensive_power = one_tenth_special_attack - one_tenth_special_enemy_defense
     attack_answer = (grade_number - enemy_grade_number + special_offensive_power + skill_total + ability_rank_boost)*types_boost
     return attack_answer
 #ダメージ計算関数特攻急所用
 def damaage_check_special_attack_critical():
-    skill_power = skill_power/10
-    skill_power = int(Decimal(str(skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+    one_tenth_skill_power = skill_power/10
+    one_tenth_skill_power_after = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_special_attack = total_special_attack/10
     one_tenth_enemy_special_defense = enemy_total_defense/10
-    one_tenth_special_attack = int(Decimal(str(one_tenth_special_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
+    one_tenth_special_attack = int(Decimal(str(one_tenth_skill_power_after)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_special_enemy_defense = int(Decimal(str(one_tenth_enemy_special_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
     skill_total = skill_power * types_boost * item_boost
     special_offensive_power = one_tenth_special_attack - one_tenth_enemy_special_defense
