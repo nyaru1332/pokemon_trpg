@@ -27,6 +27,7 @@ def damage_check_attack():
     offensive_power = one_tenth_attack - one_tenth_enemy_defense
     attack_answer = (grade_number - enemy_grade_number + offensive_power + skill_total + ability_rank_boost)*types_boost
     return attack_answer
+
 #ダメージ計算関数急所用
 def damage_check_attack_critical():
     skill_power = skill_power/10
@@ -52,6 +53,7 @@ def damaage_check__special_attack():
     special_offensive_power = one_tenth_special_attack - one_tenth_special_enemy_defense
     attack_answer = (grade_number - enemy_grade_number + special_offensive_power + skill_total + ability_rank_boost)*types_boost
     return attack_answer
+
 #ダメージ計算関数特攻急所用
 def damaage_check_special_attack_critical():
     skill_power = skill_power/10
@@ -64,6 +66,7 @@ def damaage_check_special_attack_critical():
     special_offensive_power = one_tenth_special_attack - one_tenth_enemy_special_defense
     attack_answer = (grade_number - enemy_grade_number + special_offensive_power + skill_total + ability_rank)*types_boost
     return attack_answer
+
 #グレード一覧
 grade = ['グレード1','グレード2','グレード3','グレード4','グレード5','グレード6','グレード7','グレード8','グレード9','グレード10']
 
@@ -92,6 +95,7 @@ if pokemon_name != '':
             special_attack = next((item['base_stat'] for item in stats if item['stat']['name'] == 'special-attack'), None)
             special_defense = next((item['base_stat'] for item in stats if item['stat']['name'] == 'special-defense'), None)
             speed = next((item['base_stat'] for item in stats if item['stat']['name'] == 'speed'), None)
+
         #取得したデータを表示
             col1, col2,col3 = st.columns(3)
             with col1:
@@ -147,8 +151,6 @@ if pokemon_name != '':
     else:
         st.error('指定された名前のポケモンがデータベースに見つかりません。別の名前で試してください。')
 
-
-
 pokemon_name = st.text_input('敵ポケモンの名前を入力してください:', '')
 if pokemon_name != '':
     c.execute(f"SELECT id FROM id_name WHERE name LIKE '{pokemon_name}%'")
@@ -168,6 +170,7 @@ if pokemon_name != '':
             enemy_special_attack = next((item['base_stat'] for item in stats if item['stat']['name'] == 'special-attack'), None)
             enemy_special_defense = next((item['base_stat'] for item in stats if item['stat']['name'] == 'special-defense'), None)
             enemy_speed = next((item['base_stat'] for item in stats if item['stat']['name'] == 'speed'), None)
+
         #取得した敵データを表示
             col1, col2,col3 = st.columns(3)
             with col1:
