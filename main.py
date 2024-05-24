@@ -13,6 +13,7 @@ speed = 0
 enemy_speed = 0
 skill_point_speed = 0
 enemy_skill_point_speed = 0
+enemy_total_HP = 0
 st.title('ポケモンtrpgダメージ計算ツール')
 # データベースの接続設定
 # データベースに接続する（データベースが存在しない場合は新しく作成される）
@@ -222,7 +223,6 @@ if pokemon_name != '':
         st.error('指定された名前のポケモンがデータベースに見つかりません。別の名前で試してください。')
 
 with st.form(key='damage_boost_form'):
-    st.sidebar.write("ダメージ")
     attack_type = st.sidebar.selectbox('攻撃タイプ ',["こうげき","とくこう"])
     skill_power = st.sidebar.number_input("技威力",value=0)
     critical = st.sidebar.checkbox('急所')
@@ -232,6 +232,7 @@ with st.form(key='damage_boost_form'):
     ability_rank_boost = ability_rank - enemy_ability_rank
     skill_boost = st.sidebar.number_input("特性倍率",value=1.0)
     item_boost = st.sidebar.number_input("持ち物倍率",value=1.0)
+    st.markdown('ダメージ')
     check_button = st.form_submit_button("計算!")#イベントの発火に使用してます。消したら壊れます
 
     #計算!ボタンが押されたらダメージ計算の結果を呼び出す
@@ -258,6 +259,7 @@ with st.form(key='capture_decision_form'):
     status_condition = st.sidebar.checkbox('状態異常')
     Current_HP = int(st.sidebar.number_input("現在のHP",value=0))
     type_of_ball_number = type_of_ball_list.index(type_of_ball)
+    st.markdown('捕獲判定')
     capture_decision_button = st.form_submit_button("計算!")
     if capture_decision_button == True:
         if status_condition == True:
@@ -271,7 +273,7 @@ one_tenth_speed = int(Decimal(str(one_tenth_speed)).quantize(Decimal('0'), ROUND
 one_tenth_enemy_speed = enemy_speed/10
 one_tenth_enemy_speed = int(Decimal(str(one_tenth_enemy_speed)).quantize(Decimal('0'), ROUND_HALF_UP))
 escape_success_rate = (one_tenth_speed + skill_point_speed - (one_tenth_enemy_speed + enemy_skill_point_speed)+5) * 10
-st.write('逃走成功率')
-st.write(str(escape_success_rate))
+st.markdown('逃走成功率')
+st.markdown(str(escape_success_rate))
 # データベース接続を閉じる
 conn.close()
