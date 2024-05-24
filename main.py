@@ -223,6 +223,7 @@ if pokemon_name != '':
         st.error('指定された名前のポケモンがデータベースに見つかりません。別の名前で試してください。')
 
 with st.form(key='damage_boost_form'):
+    st.sidebar.markdown('ダメージ')
     attack_type = st.sidebar.selectbox('攻撃タイプ ',["こうげき","とくこう"])
     skill_power = st.sidebar.number_input("技威力",value=0)
     critical = st.sidebar.checkbox('急所')
@@ -255,6 +256,7 @@ with st.form(key='damage_boost_form'):
             st.error('攻撃タイプが選択されてません')
 with st.form(key='capture_decision_form'):
     #捕獲判定:ボールの捕獲係数×トレーナーランク＋与えたダメージ割合＋（状態異常なら１０）＋（トレーナーランク－相手のグレード）×５
+    st.sidebar.markdown('捕獲判定')
     type_of_ball = st.sidebar.selectbox('ボールタイプ ',type_of_ball_list)
     status_condition = st.sidebar.checkbox('状態異常')
     Current_HP = int(st.sidebar.number_input("現在のHP",value=0))
