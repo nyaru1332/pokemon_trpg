@@ -5,7 +5,6 @@ import requests
 from glob import glob 
 from PIL import Image
 from os.path import join
-from sqlalchemy import create_engine
 from decimal import Decimal, ROUND_HALF_UP
 #初期値
 my_grade = ('グレード1')
