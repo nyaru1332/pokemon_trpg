@@ -107,10 +107,10 @@ if pokemon_name != '':
             with col2:
                 cols = st.columns(len(types))
                 for i, type_name in enumerate(types):
-                    enemy_img = f'18type_icon\{type_name}.png' 
-                    enemy_pokemon_types_image = Image.open(enemy_img)
+                    pokemon_img = f'18type_icon/{type_name}.png' 
+                    pokemon_types_image = Image.open(pokemon_img)
                     cols[i].write(type_name)
-                    cols[i].image(enemy_pokemon_types_image,20,20)
+                    cols[i].image(pokemon_types_image,20,20)
             with col3:
                 my_grade = st.selectbox('グレード',grade)
                 grade_number = grade.index(my_grade)
