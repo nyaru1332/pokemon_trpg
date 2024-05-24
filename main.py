@@ -8,15 +8,19 @@ from os.path import join
 from sqlalchemy import create_engine
 from decimal import Decimal, ROUND_HALF_UP
 #初期値
-my_grade = ("グレード1")
-
+my_grade = ('グレード1')
+enemy_grade = ('グレード1')
+speed = 0
+enemy_speed = 0
+skill_point_speed = 0
+enemy_skill_point_speed = 0
 st.title('ポケモンtrpgダメージ計算ツール')
 # データベースの接続設定
 # データベースに接続する（データベースが存在しない場合は新しく作成される）
 conn = sqlite3.connect('pokemon_id_data.db')
 
 #ダメージ計算の関数攻撃用<グレード差＋(攻撃/特攻ー防御/特防)＋威力＋能力ランク差>×タイプ相性
-def damage_check_attack(attack,skill_point_attack,enemy_defense,enemy_skill_point_defense,skill_power,types_boost,item_boost,grade_number,skill_boost,ability_rank_boost,enemy_grade_number):
+def damage_check_attack(attack,skill_point_attack,enemy_defense,enemy_skill_point_defense,skill_power,types_boost,item_boost,skill_boost,ability_rank_boost,grade_number,enemy_grade_number):
     one_tenth_attack = attack/10
     one_tenth_attack = int(Decimal(str(one_tenth_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
     one_tenth_enemy_defense = enemy_defense/10
@@ -69,7 +73,8 @@ def damage_check__special_attack_critical(skill_power,special_attack,skill_point
 
 #グレード一覧
 grade = ['グレード1','グレード2','グレード3','グレード4','グレード5','グレード6','グレード7','グレード8','グレード9','グレード10']
-
+#ボール一覧
+type_of_ball_list = ['モンスターボール','スーパーボール','ハイパーボール']
 # カーソルオブジェクトを作成
 c = conn.cursor()
 
@@ -248,6 +253,26 @@ with st.form(key='damage_boost_form'):
                 st.write(str(result_special_attack),'d6')
         else:
             st.error('攻撃タイプが選択されてません')
-
+with st.form(key='capture_decision_form'):
+    #捕獲判定:ボールの捕獲係数×トレーナーランク＋与えたダメージ割合＋（状態異常なら１０）＋（トレーナーランク－相手のグレード）×５
+    type_of_ball = st.sidebar.selectbox('ボールタイプ ',type_of_ball_list)
+    status_condition = st.sidebar.checkbox('状態異常')
+    Current_HP = int(st.sidebar.number_input("現在のHP",value=0))
+    type_of_ball_number = type_of_ball_list.index(type_of_ball)
+    capture_decision_button = st.form_submit_button("計算!")
+    if capture_decision_button == True:
+        if status_condition == True:
+            capture_decision = int(type_of_ball_number + 100 -Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + 10 + (grade_number - enemy_grade_number) * 5)
+        else:
+            capture_decision = int(type_of_ball_number +100 - Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + (grade_number - enemy_grade_number) * 5)
+        st.write(str(capture_decision))
+#逃走成功率＝(トレーナーの足の速さの半分 or ポケモンの素早さ-相手の素早さ+5)×10
+one_tenth_speed = speed/10
+one_tenth_speed = int(Decimal(str(one_tenth_speed)).quantize(Decimal('0'), ROUND_HALF_UP))
+one_tenth_enemy_speed = enemy_speed/10
+one_tenth_enemy_speed = int(Decimal(str(one_tenth_enemy_speed)).quantize(Decimal('0'), ROUND_HALF_UP))
+escape_success_rate = (one_tenth_speed + skill_point_speed - (one_tenth_enemy_speed + enemy_skill_point_speed)+5) * 10
+st.write('逃走成功率')
+st.write(str(escape_success_rate))
 # データベース接続を閉じる
 conn.close()
