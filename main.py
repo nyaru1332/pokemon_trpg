@@ -7,13 +7,24 @@ from PIL import Image
 from os.path import join
 from decimal import Decimal, ROUND_HALF_UP
 #初期値
-my_grade = ('グレード1')
-enemy_grade = ('グレード1')
 speed = 0
 enemy_speed = 0
 skill_point_speed = 0
 enemy_skill_point_speed = 0
 enemy_total_HP = 0
+skill_point_attack = 0
+enemy_defense = 0
+enemy_skill_point_defense = 0
+skill_power = 0
+types_boost = 0
+item_boost = 0
+skill_boost = 0
+ability_rank_boost = 0
+grade_number = 0
+enemy_grade_number = 0
+special_attack = 0
+enemy_special_defense = 0
+attack = 0
 st.title('ポケモンtrpgダメージ計算ツール')
 # データベースの接続設定
 # データベースに接続する（データベースが存在しない場合は新しく作成される）
@@ -29,7 +40,7 @@ def damage_check_attack(attack,skill_point_attack,enemy_defense,enemy_skill_poin
     one_tenth_skill_power = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
     skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
     offensive_power = one_tenth_attack + skill_point_attack - (one_tenth_enemy_defense + enemy_skill_point_defense)
-    attack_answer = int((grade_number - enemy_grade_number + offensive_power + skill_total + ability_rank_boost)*types_boost)
+    attack_answer = int((grade_number+1 - enemy_grade_number+1 + offensive_power + skill_total + ability_rank_boost)*types_boost)
     return attack_answer
 
 #ダメージ計算関数急所用
@@ -42,8 +53,8 @@ def damage_check_attack_critical(attack,skill_point_attack,enemy_defense,enemy_s
     one_tenth_skill_power = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
     skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
     offensive_power = one_tenth_attack + skill_point_attack - (one_tenth_enemy_defense + enemy_skill_point_defense)
-    attack_answer = int((grade_number - enemy_grade_number + offensive_power + skill_total + ability_rank)*types_boost)
-    return attack_answer
+    attack_answer_critical = int((grade_number+1 - enemy_grade_number+1 + offensive_power + skill_total + ability_rank)*types_boost)
+    return attack_answer_critical
 
 #ダメージ計算関数特攻用
 def damage_check__special_attack(skill_power,special_attack,skill_point_special_attack,enemy_special_defense,enemy_skill_point_special_defense,types_boost,item_boost,skill_boost,ability_rank_boost,grade_number,enemy_grade_number):
@@ -55,7 +66,7 @@ def damage_check__special_attack(skill_power,special_attack,skill_point_special_
     one_tenth_enemy_special_defense = int(Decimal(str(one_tenth_enemy_special_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
     skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
     special_offensive_power = one_tenth_special_attack + skill_point_special_attack - (one_tenth_enemy_special_defense + enemy_skill_point_special_defense)
-    special_attack_answer = int((grade_number - enemy_grade_number + special_offensive_power + skill_total + ability_rank_boost)*types_boost)
+    special_attack_answer = int((grade_number+1 - enemy_grade_number+1 + special_offensive_power + skill_total + ability_rank_boost)*types_boost)
     return special_attack_answer
 
 #ダメージ計算関数特攻急所用
@@ -68,8 +79,8 @@ def damage_check__special_attack_critical(skill_power,special_attack,skill_point
     one_tenth_enemy_special_defense = int(Decimal(str(one_tenth_enemy_special_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
     skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
     special_offensive_power = one_tenth_special_attack + skill_point_special_attack - (one_tenth_enemy_special_defense + enemy_skill_point_special_defense)
-    special_attack_answer = int((grade_number - enemy_grade_number + special_offensive_power + skill_total + ability_rank)*types_boost)
-    return special_attack_answer
+    special_attack_answer_critical = int((grade_number+1 - enemy_grade_number+1 + special_offensive_power + skill_total + ability_rank)*types_boost)
+    return special_attack_answer_critical
 
 #グレード一覧
 grade = ['グレード1','グレード2','グレード3','グレード4','グレード5','グレード6','グレード7','グレード8','グレード9','グレード10']
@@ -240,35 +251,106 @@ with st.form(key='damage_boost_form'):
     if check_button == True:
         if attack_type == "こうげき":
             if critical == True:
-                result_attack = damage_check_attack_critical(attack,skill_point_attack,enemy_defense,enemy_skill_point_defense,skill_power,types_boost,item_boost,skill_boost,ability_rank,grade_number,enemy_grade_number)
-                st.write(str(result_attack),'d6')
+                one_tenth_attack = attack/10
+                one_tenth_attack = int(Decimal(str(one_tenth_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_enemy_defense = enemy_defense/10
+                one_tenth_enemy_defense = int(Decimal(str(one_tenth_enemy_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_skill_power = skill_power/10
+                one_tenth_skill_power = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+                skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
+                offensive_power = one_tenth_attack + skill_point_attack - (one_tenth_enemy_defense + enemy_skill_point_defense)
+                attack_answer_critical = int((grade_number+1 - enemy_grade_number+1 + offensive_power + skill_total + ability_rank)*types_boost)
+                st.write(str(attack_answer_critical),'d6')
+                st.write("クリティカル")
+                #result_attack_critical = damage_check_attack_critical(attack,skill_point_attack,enemy_defense,enemy_skill_point_defense,skill_power,types_boost,item_boost,skill_boost,ability_rank,grade_number,enemy_grade_number)
+                #st.write(str(result_attack_critical),'d6')
+                #st.write(str(ability_rank))
+                #st.write(str(enemy_ability_rank))
+                #st.write(str(grade_number))
+                #st.write(str(enemy_grade_number))
+                #st.write(str(grade_number - enemy_grade_number))
             else:
-                result_attack = damage_check_attack(attack,skill_point_attack,enemy_defense,enemy_skill_point_defense,skill_power,types_boost,item_boost,grade_number,skill_boost,ability_rank_boost,enemy_grade_number)
-                st.write(str(result_attack),'d6')
+                one_tenth_attack = attack/10
+                one_tenth_attack = int(Decimal(str(one_tenth_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_enemy_defense = enemy_defense/10
+                one_tenth_enemy_defense = int(Decimal(str(one_tenth_enemy_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_skill_power = skill_power/10
+                one_tenth_skill_power = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+                skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
+                offensive_power = one_tenth_attack + skill_point_attack - (one_tenth_enemy_defense + enemy_skill_point_defense)
+                attack_answer = int((grade_number+1 - enemy_grade_number+1 + offensive_power + skill_total + ability_rank_boost)*types_boost)
+                st.write(str(attack_answer),'d6')
+                st.write("ノークリティカル")
+                #result_attack = damage_check_attack(attack,skill_point_attack,enemy_defense,enemy_skill_point_defense,skill_power,types_boost,item_boost,grade_number,skill_boost,ability_rank_boost,enemy_grade_number)
+                #st.write(str(result_attack),'d6')
+                #st.write(str(ability_rank))
+                #st.write(str(enemy_ability_rank))
+                #st.write(str(grade_number))
+                #st.write(str(enemy_grade_number))
+                #st.write(str(ability_rank_boost))
+                #st.write(str(grade_number - enemy_grade_number))
+                
         elif attack_type == "とくこう":
             if critical ==True:
-                result_special_attack = damage_check__special_attack_critical(skill_power,special_attack,skill_point_special_attack,enemy_special_defense,enemy_skill_point_special_defense,types_boost,item_boost,skill_boost,ability_rank_boost,grade_number,enemy_grade_number)
-                st.write(str(result_special_attack),'d6')
+                one_tenth_skill_power = skill_power/10
+                one_tenth_skill_power = skill_power/10
+                one_tenth_skill_power = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_special_attack = special_attack/10
+                one_tenth_special_attack = int(Decimal(str(one_tenth_special_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_enemy_special_defense = enemy_special_defense/10
+                one_tenth_enemy_special_defense = int(Decimal(str(one_tenth_enemy_special_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
+                skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
+                special_offensive_power = one_tenth_special_attack + skill_point_special_attack - (one_tenth_enemy_special_defense + enemy_skill_point_special_defense)
+                special_attack_answer_critical = int((grade_number+1 - enemy_grade_number+1 + special_offensive_power + skill_total + ability_rank)*types_boost)
+                st.write(str(special_attack_answer_critical),'d6')
+                #result_special_attack_critical = damage_check__special_attack_critical(skill_power,special_attack,skill_point_special_attack,enemy_special_defense,enemy_skill_point_special_defense,types_boost,item_boost,skill_boost,ability_rank_boost,grade_number,enemy_grade_number)
+                #st.write(str(result_special_attack_critical),'d6')
+                #st.write(str(grade_number - enemy_grade_number))
             else:
-                result_special_attack = damage_check__special_attack(skill_power,special_attack,skill_point_special_attack,enemy_special_defense,enemy_skill_point_special_defense,types_boost,item_boost,skill_boost,ability_rank_boost,grade_number,enemy_grade_number)
-                st.write(str(result_special_attack),'d6')
+                one_tenth_skill_power = skill_power/10
+                one_tenth_skill_power = int(Decimal(str(one_tenth_skill_power)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_special_attack = special_attack/10
+                one_tenth_special_attack = int(Decimal(str(one_tenth_special_attack)).quantize(Decimal('0'), ROUND_HALF_UP))
+                one_tenth_enemy_special_defense = enemy_special_defense/10
+                one_tenth_enemy_special_defense = int(Decimal(str(one_tenth_enemy_special_defense)).quantize(Decimal('0'), ROUND_HALF_UP))
+                skill_total = one_tenth_skill_power * types_boost * item_boost * skill_boost
+                special_offensive_power = one_tenth_special_attack + skill_point_special_attack - (one_tenth_enemy_special_defense + enemy_skill_point_special_defense)
+                special_attack_answer = int((grade_number+1 - enemy_grade_number+1 + special_offensive_power + skill_total + ability_rank_boost)*types_boost)
+                st.write(str(special_attack_answer),'d6')
+                #result_special_attack = damage_check__special_attack(skill_power,special_attack,skill_point_special_attack,enemy_special_defense,enemy_skill_point_special_defense,types_boost,item_boost,skill_boost,ability_rank_boost,grade_number,enemy_grade_number)
+                #st.write(str(result_special_attack),'d6')
+                #st.write(str(grade_number - enemy_grade_number))
         else:
             st.error('攻撃タイプが選択されてません')
+
 with st.form(key='capture_decision_form'):
     #捕獲判定:ボールの捕獲係数×トレーナーランク＋与えたダメージ割合＋（状態異常なら１０）＋（トレーナーランク－相手のグレード）×５
     st.sidebar.markdown('捕獲判定')
     type_of_ball = st.sidebar.selectbox('ボールタイプ ',type_of_ball_list)
     status_condition = st.sidebar.checkbox('状態異常')
     Current_HP = int(st.sidebar.number_input("現在のHP",value=0))
-    type_of_ball_number = type_of_ball_list.index(type_of_ball)
     st.markdown('捕獲判定')
     capture_decision_button = st.form_submit_button("計算!")
     if capture_decision_button == True:
-        if status_condition == True:
-            capture_decision = int(type_of_ball_number + 100 -Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + 10 + (grade_number - enemy_grade_number) * 5)
+        if type_of_ball == 'ハイパーボール':
+            if status_condition == True:
+                capture_decision = int(7 + 100 -Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + 10 + (grade_number - enemy_grade_number) * 5)
+            else:
+                capture_decision = int(7 + 100 - Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + (grade_number - enemy_grade_number) * 5)
+            st.write(str(capture_decision))
+        elif type_of_ball == 'スーパーボール':
+            if status_condition == True:
+                capture_decision = int(5 + 100 -Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + 10 + (grade_number - enemy_grade_number) * 5)
+            else:
+                capture_decision = int(5 + 100 - Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + (grade_number - enemy_grade_number) * 5)
+            st.write(str(capture_decision))
         else:
-            capture_decision = int(type_of_ball_number +100 - Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + (grade_number - enemy_grade_number) * 5)
-        st.write(str(capture_decision))
+            if status_condition == True:
+                capture_decision = int(2 + 100 -Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + 10 + (grade_number - enemy_grade_number) * 5)
+            else:
+                capture_decision = int(2 + 100 - Current_HP/(enemy_total_HP + enemy_grade_number * 15)*100 + (grade_number - enemy_grade_number) * 5)
+            st.write(str(capture_decision))
+
 #逃走成功率＝(トレーナーの足の速さの半分 or ポケモンの素早さ-相手の素早さ+5)×10
 one_tenth_speed = speed/10
 one_tenth_speed = int(Decimal(str(one_tenth_speed)).quantize(Decimal('0'), ROUND_HALF_UP))
